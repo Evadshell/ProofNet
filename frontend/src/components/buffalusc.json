@@ -1,0 +1,231 @@
+{
+  "address": "An9GXND7q4nQtq3wDtH2LZ9toeEBxVvTo7ErrmL3X4K3",
+  "metadata": {
+    "name": "buffalusc",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "add_user",
+      "discriminator": [
+        15,
+        200,
+        3,
+        168,
+        184,
+        41,
+        189,
+        176
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "client_session_id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "add_verification",
+      "discriminator": [
+        28,
+        85,
+        236,
+        60,
+        153,
+        232,
+        93,
+        122
+      ],
+      "accounts": [
+        {
+          "name": "verification",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "user",
+          "writable": true
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "verified_by",
+          "type": "string"
+        },
+        {
+          "name": "targeted_session_id",
+          "type": "string"
+        },
+        {
+          "name": "timestamp",
+          "type": "i64"
+        },
+        {
+          "name": "status",
+          "type": "string"
+        },
+        {
+          "name": "verified_client_session",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "get_verified",
+      "discriminator": [
+        132,
+        231,
+        2,
+        30,
+        115,
+        74,
+        23,
+        26
+      ],
+      "accounts": [
+        {
+          "name": "user",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "verified_by",
+          "type": {
+            "vec": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "initialize",
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "User",
+      "discriminator": [
+        159,
+        117,
+        95,
+        227,
+        239,
+        151,
+        58,
+        236
+      ]
+    },
+    {
+      "name": "Verification",
+      "discriminator": [
+        230,
+        33,
+        140,
+        88,
+        132,
+        240,
+        116,
+        178
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "User",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "client_session_id",
+            "type": "string"
+          },
+          {
+            "name": "past_session_ids",
+            "type": {
+              "vec": "string"
+            }
+          },
+          {
+            "name": "is_verified",
+            "type": "bool"
+          },
+          {
+            "name": "verified_by",
+            "type": {
+              "vec": "string"
+            }
+          },
+          {
+            "name": "users_verified",
+            "type": {
+              "vec": "string"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Verification",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "verified_by",
+            "type": "string"
+          },
+          {
+            "name": "targeted_session_id",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "status",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ]
+}
