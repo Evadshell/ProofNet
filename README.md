@@ -6,9 +6,9 @@ ProofNet is a modern web application built with a microservices architecture, co
 
 ```
 ProofNet/
-├── frontend/         # Next.js frontend application
-├── server/          # Node.js backend server
-└── buffalu-cli/     # Command-line interface tool
+├── frontend/        
+├── server/          
+└── buffalu-cli/     
 ```
 
 ## Components
