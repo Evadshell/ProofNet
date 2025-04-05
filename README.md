@@ -19,7 +19,6 @@ ProofNet/
 - Includes Solana wallet integration
 - Uses TailwindCSS for styling
 - Implements real-time features with Socket.IO
-- Includes 3D visualization capabilities with Three.js
 - TypeScript support
 
 Key Features:
