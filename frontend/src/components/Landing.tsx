@@ -20,6 +20,15 @@ import {
   X,
   ArrowRight,
 } from "lucide-react";
+import BuffaluNavbar from "./ui/navbar";
+import Footer from "./footer";
+import { Vortex } from "./ui/vortex";
+import HowItWorks from "./HowItWorks";
+import Timeline from "./WhyBuffalu";
+import { time } from "console";
+import DarkRewardsSection from "./HowToUse";
+import UseCasesSection from "./UseCase";
+import WavyBackground from "./ui/wave";
 
 const Landing = () => {
   const [loading, setLoading] = useState(false);
@@ -27,6 +36,60 @@ const Landing = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [scrollProgress, setScrollProgress] = useState(0);
+
+  interface TimelineEntry {
+    title: string;
+    content: React.ReactNode;
+  }
+
+  const timelineData: TimelineEntry[] = [
+    {
+      title: "How It Works",
+      content: (
+        <div className="bg-white dark:bg-neutral-900 p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-lg hover:shadow-xl transition-all duration-300">
+          <p className="text-neutral-700 dark:text-neutral-300">
+          Our system combines UDP ping validation with Solana staking
+              mechanics to create a robust and reliable location verification
+              system.
+          </p>
+        </div>
+      ),
+    },
+    {
+      title: "Claim a Location",
+      content: (
+        <div className="bg-white dark:bg-neutral-900 p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-lg hover:shadow-xl transition-all duration-300">
+          <p className="text-neutral-700 dark:text-neutral-300">
+          Users submit location proofs via UDP pings to the network,
+          creating a verifiable claim that can be validated by others.
+          </p>
+        </div>
+      ),
+    },
+    {
+      title: "Validate Others",
+      content: (
+        <div className="bg-white dark:bg-neutral-900 p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-lg hover:shadow-xl transition-all duration-300">
+          <p className="text-neutral-700 dark:text-neutral-300">
+          Validators confirm location claims by measuring RTT (Round
+            Trip Time) through decentralized verification processes.
+          </p>
+        </div>
+      ),
+    },
+    {
+      title: "Earn Rewards",
+      content: (
+        <div className="bg-white dark:bg-neutral-900 p-6 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-lg hover:shadow-xl transition-all duration-300">
+          <p className="text-neutral-700 dark:text-neutral-300">
+          Validators and validated users receive Buffalu tokens as
+          rewards for participating honestly in the network.
+          </p>
+        </div>
+      ),
+    },
+  ];
+  
 
   // Toggle dark mode and save preference
   const toggleDarkMode = () => {
@@ -164,199 +227,34 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300 relative">
+    <div className="overflow-hidden min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300 relative">
       {/* Scroll Progress Indicator */}
       <div
-        className="fixed top-0 left-0 h-1 bg-blue-500 z-50 transition-all duration-300"
+        className="fixed top-0 left-0 h-1 bg-white z-50 transition-all duration-300"
         style={{ width: `${scrollProgress}%` }}
       />
 
-      {/* Mobile Menu */}
-      <div
-        className={`fixed inset-0 bg-white dark:bg-gray-900 z-40 flex flex-col p-6 transition-transform duration-300 transform ${
-          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="flex justify-between items-center mb-10">
-          <div className="flex items-center space-x-2">
-            <Shield className="w-7 h-7 text-blue-500" />
-            <span className="text-2xl font-bold">Buffalu</span>
-          </div>
-          <button
-            onClick={() => setMobileMenuOpen(false)}
-            className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-          >
-            <X className="w-6 h-6" />
-          </button>
-        </div>
-        <div className="flex flex-col space-y-6 text-xl">
-          <a
-            href="#home"
-            onClick={() => setMobileMenuOpen(false)}
-            className={`${
-              activeSection === "home" ? "text-blue-500 font-bold" : ""
-            } hover:text-blue-500 transition-colors`}
-          >
-            Home
-          </a>
-          <a
-            href="#how-it-works"
-            onClick={() => setMobileMenuOpen(false)}
-            className={`${
-              activeSection === "how-it-works" ? "text-blue-500 font-bold" : ""
-            } hover:text-blue-500 transition-colors`}
-          >
-            How It Works
-          </a>
-          <a
-            href="#why-buffalu"
-            onClick={() => setMobileMenuOpen(false)}
-            className={`${
-              activeSection === "why-buffalu" ? "text-blue-500 font-bold" : ""
-            } hover:text-blue-500 transition-colors`}
-          >
-            Why Buffalu
-          </a>
-          <a
-            href="#rewards"
-            onClick={() => setMobileMenuOpen(false)}
-            className={`${
-              activeSection === "rewards" ? "text-blue-500 font-bold" : ""
-            } hover:text-blue-500 transition-colors`}
-          >
-            Rewards
-          </a>
-          <a
-            href="#use-cases"
-            onClick={() => setMobileMenuOpen(false)}
-            className={`${
-              activeSection === "use-cases" ? "text-blue-500 font-bold" : ""
-            } hover:text-blue-500 transition-colors`}
-          >
-            Use Cases
-          </a>
-        </div>
-        <div className="mt-auto pt-6 border-t border-gray-200 dark:border-gray-800">
-          <button
-            onClick={toggleDarkMode}
-            className="w-full py-3 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center justify-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-          >
-            {darkMode ? (
-              <>
-                <Sun className="w-5 h-5" />
-                <span>Light Mode</span>
-              </>
-            ) : (
-              <>
-                <Moon className="w-5 h-5" />
-                <span>Dark Mode</span>
-              </>
-            )}
-          </button>
-          <button className="w-full py-3 mt-4 rounded-lg bg-blue-500 text-white flex items-center justify-center space-x-2 hover:bg-blue-600 transition-colors">
-            <span>Launch App</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
-
-      {/* Fixed Navbar */}
-      <nav className="sticky top-0 z-30 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-colors">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <Shield className="w-7 h-7 text-blue-500" />
-              <span className="text-xl font-bold">Buffalu</span>
-            </div>
-            <div className="hidden md:flex items-center space-x-8">
-              <a
-                href="#home"
-                className={`${
-                  activeSection === "home"
-                    ? "text-blue-500 font-medium"
-                    : "text-gray-700 dark:text-gray-300"
-                } hover:text-blue-500 dark:hover:text-blue-400 transition-colors`}
-              >
-                Home
-              </a>
-              <a
-                href="#how-it-works"
-                className={`${
-                  activeSection === "how-it-works"
-                    ? "text-blue-500 font-medium"
-                    : "text-gray-700 dark:text-gray-300"
-                } hover:text-blue-500 dark:hover:text-blue-400 transition-colors`}
-              >
-                How It Works
-              </a>
-              <a
-                href="#why-buffalu"
-                className={`${
-                  activeSection === "why-buffalu"
-                    ? "text-blue-500 font-medium"
-                    : "text-gray-700 dark:text-gray-300"
-                } hover:text-blue-500 dark:hover:text-blue-400 transition-colors`}
-              >
-                Why Buffalu
-              </a>
-              <a
-                href="#rewards"
-                className={`${
-                  activeSection === "rewards"
-                    ? "text-blue-500 font-medium"
-                    : "text-gray-700 dark:text-gray-300"
-                } hover:text-blue-500 dark:hover:text-blue-400 transition-colors`}
-              >
-                Rewards
-              </a>
-              <a
-                href="#use-cases"
-                className={`${
-                  activeSection === "use-cases"
-                    ? "text-blue-500 font-medium"
-                    : "text-gray-700 dark:text-gray-300"
-                } hover:text-blue-500 dark:hover:text-blue-400 transition-colors`}
-              >
-                Use Cases
-              </a>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={toggleDarkMode}
-                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                {darkMode ? (
-                  <Sun className="w-5 h-5" />
-                ) : (
-                  <Moon className="w-5 h-5" />
-                )}
-              </button>
-              <button
-                className="hidden md:flex bg-blue-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors"
-                onClick={() => (window.location.href = "/dashboard")}
-              >
-                Launch App
-              </button>
-              <button
-                onClick={() => setMobileMenuOpen(true)}
-                className="md:hidden w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                <Menu className="w-6 h-6" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <BuffaluNavbar/>
 
       {/* Hero Section with Magic UI Globe */}
       <div
         id="home"
-        className="relative bg-gradient-to-b from-blue-50 to-white dark:from-gray-800 dark:to-gray-900 text-gray-900 dark:text-white overflow-hidden pt-24 pb-32"
+        className="relative bg-black dark:from-gray-800 dark:to-gray-900 text-gray-900 dark:text-white overflow-hidden pt-24 pb-32"
       >
+           <Vortex 
+              particleCount={700}
+              baseHue={220}
+              backgroundColor="#000000"
+              baseRadius={1}
+              rangeRadius={2}
+              baseSpeed={0.1}
+              rangeSpeed={1.5}
+              containerClassName="relatuve inset-0"
+            >
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute w-full h-full opacity-30 dark:opacity-10 pointer-events-none">
             {/* Animated grid background */}
-            <svg
+            {/* <svg
               width="100%"
               height="100%"
               viewBox="0 0 100 100"
@@ -378,12 +276,12 @@ const Landing = () => {
                 </pattern>
               </defs>
               <rect width="100%" height="100%" fill="url(#grid)" />
-            </svg>
+            </svg> */}
           </div>
           {/* Animated circles */}
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-400 dark:bg-blue-600 rounded-full mix-blend-multiply dark:mix-blend-hard-light filter blur-3xl opacity-10 animate-blob" />
+          {/* <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-400 dark:bg-blue-600 rounded-full mix-blend-multiply dark:mix-blend-hard-light filter blur-3xl opacity-10 animate-blob" />
           <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-purple-400 dark:bg-purple-600 rounded-full mix-blend-multiply dark:mix-blend-hard-light filter blur-3xl opacity-10 animate-blob animation-delay-2000" />
-          <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-cyan-400 dark:bg-cyan-600 rounded-full mix-blend-multiply dark:mix-blend-hard-light filter blur-3xl opacity-10 animate-blob animation-delay-4000" />
+          <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-cyan-400 dark:bg-cyan-600 rounded-full mix-blend-multiply dark:mix-blend-hard-light filter blur-3xl opacity-10 animate-blob animation-delay-4000" /> */}
         </div>
 
         <div className="container mx-auto px-6 relative">
@@ -399,8 +297,8 @@ const Landing = () => {
             <div className="relative">
               {/* Globe positioned behind the text */}
               <div className="absolute inset-0 flex items-center justify-center overflow-hidden z-0">
-                <Globe className="scale-150 opacity-60 dark:opacity-40" />
-                <div className="absolute inset-0 bg-gradient-to-b from-blue-50/90 to-white/90 dark:from-gray-800/90 dark:to-gray-900/90" />
+                {/* <Globe className="scale-150 opacity-60 dark:opacity-40" /> */}
+                <div className="absolute inset-0 bg-transparent" />
               </div>
 
               {/* Text content on top of the Globe */}
@@ -442,593 +340,252 @@ const Landing = () => {
             </div>
           </div>
         </div>
-
+        </Vortex>
         {/* Enhanced Network Visualization */}
         <div className="container mx-auto px-6 mt-24 relative">
-          <div className="h-80 relative rounded-2xl overflow-hidden bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 shadow-xl">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="relative w-full h-full">
-                {/* Animated nodes */}
-                <div className="absolute top-1/4 left-1/4 flex flex-col items-center">
-                  <div className="w-4 h-4 bg-blue-500 rounded-full mb-1 shadow-lg shadow-blue-500/50 animate-pulse" />
-                  <div className="bg-white dark:bg-gray-800 text-xs font-medium px-2 py-1 rounded shadow opacity-75">
-                    Node 1
-                  </div>
-                </div>
-
-                <div className="absolute top-1/3 right-1/4 flex flex-col items-center">
-                  <div
-                    className="w-4 h-4 bg-purple-500 rounded-full mb-1 shadow-lg shadow-purple-500/50 animate-pulse"
-                    style={{ animationDelay: "0.5s" }}
-                  />
-                  <div className="bg-white dark:bg-gray-800 text-xs font-medium px-2 py-1 rounded shadow opacity-75">
-                    Node 2
-                  </div>
-                </div>
-
-                <div className="absolute bottom-1/3 left-1/3 flex flex-col items-center">
-                  <div
-                    className="w-4 h-4 bg-green-500 rounded-full mb-1 shadow-lg shadow-green-500/50 animate-pulse"
-                    style={{ animationDelay: "1s" }}
-                  />
-                  <div className="bg-white dark:bg-gray-800 text-xs font-medium px-2 py-1 rounded shadow opacity-75">
-                    Node 3
-                  </div>
-                </div>
-
-                <div className="absolute bottom-1/4 right-1/3 flex flex-col items-center">
-                  <div
-                    className="w-4 h-4 bg-yellow-500 rounded-full mb-1 shadow-lg shadow-yellow-500/50 animate-pulse"
-                    style={{ animationDelay: "1.5s" }}
-                  />
-                  <div className="bg-white dark:bg-gray-800 text-xs font-medium px-2 py-1 rounded shadow opacity-75">
-                    Node 4
-                  </div>
-                </div>
-
-                {/* Animated connection lines with data packets */}
-                <svg
-                  className="w-full h-full"
-                  viewBox="0 0 800 400"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M200 100 L 600 300"
-                    stroke="rgba(59, 130, 246, 0.5)"
-                    strokeWidth="1.5"
-                    strokeDasharray="5,5"
-                  />
-                  <path
-                    d="M200 300 L 600 100"
-                    stroke="rgba(59, 130, 246, 0.5)"
-                    strokeWidth="1.5"
-                    strokeDasharray="5,5"
-                  />
-                  <path
-                    d="M100 200 L 700 200"
-                    stroke="rgba(59, 130, 246, 0.5)"
-                    strokeWidth="1.5"
-                    strokeDasharray="5,5"
-                  />
-                  <path
-                    d="M300 50 L 500 350"
-                    stroke="rgba(59, 130, 246, 0.5)"
-                    strokeWidth="1.5"
-                    strokeDasharray="5,5"
-                  />
-                  <path
-                    d="M300 350 L 500 50"
-                    stroke="rgba(59, 130, 246, 0.5)"
-                    strokeWidth="1.5"
-                    strokeDasharray="5,5"
-                  />
-
-                  {/* Animated data packets */}
-                  <circle r="4" fill="#3B82F6">
-                    <animateMotion
-                      path="M200 100 L 600 300"
-                      dur="3s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                  <circle r="4" fill="#8B5CF6">
-                    <animateMotion
-                      path="M600 100 L 200 300"
-                      dur="4s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                  <circle r="4" fill="#10B981">
-                    <animateMotion
-                      path="M100 200 L 700 200"
-                      dur="5s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                </svg>
-              </div>
-            </div>
+  <div className="h-96 relative rounded-2xl overflow-hidden bg-gradient-to-b from-gray-900 to-gray-950 border border-gray-800 shadow-2xl">
+    {/* Background effects */}
+    <div className="absolute inset-0 bg-black opacity-40 z-0"></div>
+    <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-600 opacity-5 rounded-full blur-3xl"></div>
+    <div className="absolute bottom-1/3 right-1/3 w-48 h-48 bg-purple-600 opacity-5 rounded-full blur-3xl"></div>
+    
+    <div className="absolute inset-0 flex items-center justify-center z-10">
+      <div className="relative w-full h-full">
+        {/* Animated nodes with improved styling */}
+        <div className="absolute top-1/4 left-1/4 flex flex-col items-center">
+          <div className="w-5 h-5 bg-blue-500 rounded-full mb-2 shadow-lg shadow-blue-500/50 animate-pulse"></div>
+          <div className="bg-gray-900 bg-opacity-80 text-blue-400 text-xs font-medium px-3 py-1 rounded-md shadow-lg backdrop-blur-sm border border-gray-800">
+            Node 1
           </div>
         </div>
+
+        <div className="absolute top-1/3 right-1/4 flex flex-col items-center">
+          <div
+            className="w-5 h-5 bg-purple-500 rounded-full mb-2 shadow-lg shadow-purple-500/50 animate-pulse"
+            style={{ animationDelay: "0.5s" }}
+          ></div>
+          <div className="bg-gray-900 bg-opacity-80 text-purple-400 text-xs font-medium px-3 py-1 rounded-md shadow-lg backdrop-blur-sm border border-gray-800">
+            Node 2
+          </div>
+        </div>
+
+        <div className="absolute bottom-1/3 left-1/3 flex flex-col items-center">
+          <div
+            className="w-5 h-5 bg-emerald-500 rounded-full mb-2 shadow-lg shadow-emerald-500/50 animate-pulse"
+            style={{ animationDelay: "1s" }}
+          ></div>
+          <div className="bg-gray-900 bg-opacity-80 text-emerald-400 text-xs font-medium px-3 py-1 rounded-md shadow-lg backdrop-blur-sm border border-gray-800">
+            Node 3
+          </div>
+        </div>
+
+        <div className="absolute bottom-1/4 right-1/3 flex flex-col items-center">
+          <div
+            className="w-5 h-5 bg-amber-500 rounded-full mb-2 shadow-lg shadow-amber-500/50 animate-pulse"
+            style={{ animationDelay: "1.5s" }}
+          ></div>
+          <div className="bg-gray-900 bg-opacity-80 text-amber-400 text-xs font-medium px-3 py-1 rounded-md shadow-lg backdrop-blur-sm border border-gray-800">
+            Node 4
+          </div>
+        </div>
+
+        {/* Improved animated connection lines with data packets */}
+        <svg
+          className="w-full h-full"
+          viewBox="0 0 800 400"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* Connection lines with improved styling */}
+          <path
+            d="M200 100 L 600 300"
+            stroke="rgba(59, 130, 246, 0.3)"
+            strokeWidth="1"
+            strokeDasharray="4,6"
+          >
+            <animate
+              attributeName="stroke-opacity"
+              values="0.2;0.4;0.2"
+              dur="8s"
+              repeatCount="indefinite"
+            />
+          </path>
+          <path
+            d="M200 300 L 600 100"
+            stroke="rgba(139, 92, 246, 0.3)"
+            strokeWidth="1"
+            strokeDasharray="4,6"
+          >
+            <animate
+              attributeName="stroke-opacity"
+              values="0.2;0.4;0.2"
+              dur="7s"
+              repeatCount="indefinite"
+            />
+          </path>
+          <path
+            d="M100 200 L 700 200"
+            stroke="rgba(16, 185, 129, 0.3)"
+            strokeWidth="1"
+            strokeDasharray="4,6"
+          >
+            <animate
+              attributeName="stroke-opacity"
+              values="0.2;0.4;0.2"
+              dur="9s"
+              repeatCount="indefinite"
+            />
+          </path>
+          <path
+            d="M300 50 L 500 350"
+            stroke="rgba(245, 158, 11, 0.3)"
+            strokeWidth="1"
+            strokeDasharray="4,6"
+          >
+            <animate
+              attributeName="stroke-opacity"
+              values="0.2;0.4;0.2"
+              dur="10s"
+              repeatCount="indefinite"
+            />
+          </path>
+          <path
+            d="M300 350 L 500 50"
+            stroke="rgba(59, 130, 246, 0.3)"
+            strokeWidth="1"
+            strokeDasharray="4,6"
+          >
+            <animate
+              attributeName="stroke-opacity"
+              values="0.2;0.4;0.2"
+              dur="11s"
+              repeatCount="indefinite"
+            />
+          </path>
+
+          {/* Animated data packets with glow effect */}
+          <circle r="3" fill="#3B82F6">
+            <animateMotion
+              path="M200 100 L 600 300"
+              dur="4s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="opacity"
+              values="0;0.9;0"
+              dur="4s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="r"
+              values="2;3;2"
+              dur="4s"
+              repeatCount="indefinite"
+            />
+          </circle>
+          <circle r="3" fill="#8B5CF6">
+            <animateMotion
+              path="M600 100 L 200 300"
+              dur="5s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="opacity"
+              values="0;0.9;0"
+              dur="5s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="r"
+              values="2;3;2"
+              dur="5s"
+              repeatCount="indefinite"
+            />
+          </circle>
+          <circle r="3" fill="#10B981">
+            <animateMotion
+              path="M100 200 L 700 200"
+              dur="6s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="opacity"
+              values="0;0.9;0"
+              dur="6s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="r"
+              values="2;3;2"
+              dur="6s"
+              repeatCount="indefinite"
+            />
+          </circle>
+          
+          {/* Additional data packets for more visual interest */}
+          <circle r="3" fill="#F59E0B">
+            <animateMotion
+              path="M300 50 L 500 350"
+              dur="4.5s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="opacity"
+              values="0;0.9;0"
+              dur="4.5s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="r"
+              values="2;3;2"
+              dur="4.5s"
+              repeatCount="indefinite"
+            />
+          </circle>
+          <circle r="3" fill="#3B82F6">
+            <animateMotion
+              path="M500 50 L 300 350"
+              dur="5.5s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="opacity"
+              values="0;0.9;0"
+              dur="5.5s"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="r"
+              values="2;3;2"
+              dur="5.5s"
+              repeatCount="indefinite"
+            />
+          </circle>
+        </svg>
+      </div>
+    </div>
+    
+    {/* Subtle grid overlay for depth */}
+    <div className="absolute inset-0 opacity-5" style={{ 
+      backgroundImage: "linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)",
+      backgroundSize: "20px 20px" 
+    }}></div>
+  </div>
+</div>
       </div>
 
       {/* How It Works Section - Enhanced with animations */}
-      <div id="how-it-works" className="py-28 bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6 dark:text-white relative inline-block">
-              How It Works
-              <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-blue-500 rounded-full"></span>
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-lg">
-              Our system combines UDP ping validation with Solana staking
-              mechanics to create a robust and reliable location verification
-              system.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="group transform transition-all duration-300 hover:-translate-y-2">
-              <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all h-full flex flex-col">
-                <div className="bg-blue-500 text-white w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <MapPin className="w-7 h-7" />
-                </div>
-                <h3 className="text-2xl font-bold mb-4 dark:text-white">
-                  Claim a Location
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                  Users submit location proofs via UDP pings to the network,
-                  creating a verifiable claim that can be validated by others.
-                </p>
-                <div className="mt-auto">
-                  <span className="text-blue-500 font-medium inline-flex items-center group-hover:translate-x-1 transition-transform duration-300">
-                    Learn more <ChevronRight className="ml-1 w-4 h-4" />
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="group transform transition-all duration-300 hover:-translate-y-2">
-              <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all h-full flex flex-col">
-                <div className="bg-purple-500 text-white w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Users className="w-7 h-7" />
-                </div>
-                <h3 className="text-2xl font-bold mb-4 dark:text-white">
-                  Validate Others
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                  Validators confirm location claims by measuring RTT (Round
-                  Trip Time) through decentralized verification processes.
-                </p>
-                <div className="mt-auto">
-                  <span className="text-purple-500 font-medium inline-flex items-center group-hover:translate-x-1 transition-transform duration-300">
-                    Learn more <ChevronRight className="ml-1 w-4 h-4" />
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="group transform transition-all duration-300 hover:-translate-y-2">
-              <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all h-full flex flex-col">
-                <div className="bg-green-500 text-white w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                  <Coins className="w-7 h-7" />
-                </div>
-                <h3 className="text-2xl font-bold mb-4 dark:text-white">
-                  Earn Rewards
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                  Validators and validated users receive Buffalu tokens as
-                  rewards for participating honestly in the network.
-                </p>
-                <div className="mt-auto">
-                  <span className="text-green-500 font-medium inline-flex items-center group-hover:translate-x-1 transition-transform duration-300">
-                    Learn more <ChevronRight className="ml-1 w-4 h-4" />
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Interactive Process Demo */}
-          <div className="mt-24">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold mb-4 dark:text-white">
-                See the process in action
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                Click the button below to see a simulation of the location
-                verification process.
-              </p>
-            </div>
-            <div className="w-full flex items-center justify-center">
-              <button
-                onClick={() => setLoading(true)}
-                className="bg-gradient-to-r from-blue-500 to-purple-600 text-white mx-auto transition font-medium duration-300 py-4 px-8 rounded-xl flex items-center justify-center shadow-lg hover:shadow-blue-500/25 transform hover:-translate-y-1"
-              >
-                Simulate Verification
-                <Zap className="ml-2 w-5 h-5" />
-              </button>
-              <SimpleLoader loading={loading} loadingStates={loadingStates} />
-            </div>
-          </div>
-        </div>
-      </div>
+       <HowItWorks/>
 
       {/* Why Buffalu Section - Enhanced with hover effects */}
-      <div
-        id="why-buffalu"
-        className="py-28 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 text-gray-900 dark:text-white"
-      >
-        <div className="container mx-auto px-6">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6 relative inline-block">
-              Why Buffalu?
-              <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-blue-500 rounded-full"></span>
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
-              Our decentralized system ensures network integrity through
-              economic incentives. Honest validators earn rewards while
-              malicious actors face penalties.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
-              <div className="text-blue-500 mb-6">
-                <GlobeIcon className="w-10 h-10" />
-              </div>
-              <h3 className="text-xl font-bold mb-4">
-                Decentralized & Trustless
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                No central authority or trust required - the network validates
-                through distributed consensus
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
-              <div className="text-purple-500 mb-6">
-                <Coins className="w-10 h-10" />
-              </div>
-              <h3 className="text-xl font-bold mb-4">
-                Earn Tokens for Verifications
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Get rewarded with Buffalu tokens for every validation you
-                perform or receive
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
-              <div className="text-green-500 mb-6">
-                <Zap className="w-10 h-10" />
-              </div>
-              <h3 className="text-xl font-bold mb-4">Fast & Scalable</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Built on Solana for lightning-fast transactions and high
-                throughput capacity
-              </p>
-            </div>
-
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col">
-              <div className="text-red-500 mb-6">
-                <Lock className="w-10 h-10" />
-              </div>
-              <h3 className="text-xl font-bold mb-4">Secure By Design</h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Economic incentives and advanced cryptography ensure network
-                integrity
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <Timeline data={timelineData}/>
       {/* Rewards Section - Replaced with step-by-step instructions */}
-      <div id="rewards" className="py-28 bg-white dark:bg-gray-900">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-12">
-            <div className="md:w-1/2">
-              <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-blue-100 dark:bg-blue-900/40 mb-6">
-                <Coins className="w-4 h-4 text-blue-500" />
-                <span className="text-blue-500 dark:text-blue-400 text-sm font-medium">
-                  Getting Started
-                </span>
-              </div>
-              <h2 className="text-4xl font-bold mb-6 dark:text-white">
-                Start Earning Rewards in 6 Simple Steps
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                Follow these straightforward steps to begin your journey with
-                Buffalu and start earning rewards by validating locations and
-                participating in the network.
-              </p>
-
-              <div className="space-y-6 mt-8">
-                <div className="flex items-start">
-                  <div className="bg-blue-100 dark:bg-blue-900/40 p-2 rounded-lg mr-4 flex-shrink-0">
-                    <span className="w-6 h-6 text-blue-500 font-bold flex items-center justify-center">
-                      1
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-lg mb-2 dark:text-white">
-                      Go to Dashboard
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      Access your Buffalu dashboard to begin the setup process.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <div className="bg-purple-100 dark:bg-purple-900/40 p-2 rounded-lg mr-4 flex-shrink-0">
-                    <span className="w-6 h-6 text-purple-500 font-bold flex items-center justify-center">
-                      2
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-lg mb-2 dark:text-white">
-                      Install Server Package
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-blue-500">
-                        npm i buffalu-cli
-                      </code>
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <div className="bg-green-100 dark:bg-green-900/40 p-2 rounded-lg mr-4 flex-shrink-0">
-                    <span className="w-6 h-6 text-green-500 font-bold flex items-center justify-center">
-                      3
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-lg mb-2 dark:text-white">
-                      Start the Server
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-green-500">
-                        buffalu-cli
-                      </code>
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <div className="bg-yellow-100 dark:bg-yellow-900/40 p-2 rounded-lg mr-4 flex-shrink-0">
-                    <span className="w-6 h-6 text-yellow-500 font-bold flex items-center justify-center">
-                      4
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-lg mb-2 dark:text-white">
-                      Enter Session ID
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      Copy the session ID and enter it in the frontend field.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <div className="bg-red-100 dark:bg-red-900/40 p-2 rounded-lg mr-4 flex-shrink-0">
-                    <span className="w-6 h-6 text-red-500 font-bold flex items-center justify-center">
-                      5
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-lg mb-2 dark:text-white">
-                      Get Validated
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      Get validated from available servers in the network.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <div className="bg-cyan-100 dark:bg-cyan-900/40 p-2 rounded-lg mr-4 flex-shrink-0">
-                    <span className="w-6 h-6 text-cyan-500 font-bold flex items-center justify-center">
-                      6
-                    </span>
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-lg mb-2 dark:text-white">
-                      Start Earning
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      Begin earning rewards by validating others on the network.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="md:w-1/2 relative">
-              <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-3xl p-8 border border-gray-200 dark:border-gray-700 shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full opacity-50 pointer-events-none">
-                  <svg
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 100 100"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <defs>
-                      <pattern
-                        id="grid-small"
-                        width="5"
-                        height="5"
-                        patternUnits="userSpaceOnUse"
-                      >
-                        <path
-                          d="M 5 0 L 0 0 0 5"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="0.2"
-                        />
-                      </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#grid-small)" />
-                  </svg>
-                </div>
-
-                <div className="relative z-10">
-                  <div className="flex items-center justify-center mb-8">
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center shadow-lg animate-pulse">
-                      <Zap className="w-10 h-10 text-white" />
-                    </div>
-                  </div>
-
-                  <div className="text-center mb-8">
-                    <h3 className="text-2xl font-bold mb-2 dark:text-white">
-                      Ready to Start?
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-300">
-                      Join the Buffalu network and begin earning rewards today
-                    </p>
-                  </div>
-
-                  <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-gray-700">
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-center space-x-2">
-                        <Shield className="w-5 h-5 text-blue-500" />
-                        <span className="text-gray-700 dark:text-gray-300">
-                          Secure Verification
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-center space-x-2">
-                        <Coins className="w-5 h-5 text-purple-500" />
-                        <span className="text-gray-700 dark:text-gray-300">
-                          Instant Rewards
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-center space-x-2">
-                        <Users className="w-5 h-5 text-green-500" />
-                        <span className="text-gray-700 dark:text-gray-300">
-                          Growing Community
-                        </span>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => (window.location.href = "/dashboard")}
-                      className="w-full mt-6 bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-medium hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200 transform hover:-translate-y-1 flex items-center justify-center"
-                    >
-                      Go to Dashboard
-                      <ArrowRight className="ml-2 w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <DarkRewardsSection/>
 
       {/* Use Cases Section - Enhanced with animation */}
-      <div
-        id="use-cases"
-        className="py-28 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 text-gray-900 dark:text-white"
-      >
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6 relative inline-block">
-              Use Cases
-              <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-blue-500 rounded-full"></span>
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-lg">
-              Buffalu`s location verification protocol opens up new
-              possibilities across various industries and applications.
-            </p>
-          </div>
+      <UseCasesSection/>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="group bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="mb-6 flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-blue-600 text-white group-hover:scale-110 transition-transform duration-300">
-                <Users className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-4 dark:text-white">
-                Social Applications
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Enable location-based social networks with verifiable check-ins
-                and meetups, creating trustless social proof.
-              </p>
-            </div>
-
-            <div className="group bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="mb-6 flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 text-white group-hover:scale-110 transition-transform duration-300">
-                <Coins className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-4 dark:text-white">
-                DeFi & Commerce
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Create location-based DeFi services and enable geofenced
-                commerce with incentives for physical presence.
-              </p>
-            </div>
-
-            <div className="group bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="mb-6 flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400 to-green-600 text-white group-hover:scale-110 transition-transform duration-300">
-                <GlobeIcon className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-4 dark:text-white">
-                Tourism & Travel
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Verify visits to tourist destinations with rewards for
-                exploration and authenticated travel experiences.
-              </p>
-            </div>
-
-            <div className="group bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="mb-6 flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-red-400 to-red-600 text-white group-hover:scale-110 transition-transform duration-300">
-                <Lock className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-4 dark:text-white">
-                Security & Access
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Enhance physical security systems with decentralized location
-                verification for secure access control.
-              </p>
-            </div>
-
-            <div className="group bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="mb-6 flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-400 to-yellow-600 text-white group-hover:scale-110 transition-transform duration-300">
-                <MessageSquare className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-4 dark:text-white">
-                Events & Conferences
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Confirm attendance at events with proof-of-location, enabling
-                new types of engagement and rewards.
-              </p>
-            </div>
-
-            <div className="group bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-              <div className="mb-6 flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-400 to-cyan-600 text-white group-hover:scale-110 transition-transform duration-300">
-                <Shield className="w-8 h-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-4 dark:text-white">
-                Gaming & AR
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Power location-based games and augmented reality experiences
-                with verifiable real-world interactions.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
+      {/* CTA Section
       <div className="py-20 bg-gradient-to-r from-blue-500 to-purple-600 text-white">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold mb-6">
@@ -1066,178 +623,10 @@ const Landing = () => {
             </button>
           </div>
         </div>
-      </div>
-
+      </div> */}
       {/* Footer */}
-      <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
-        <div className="container mx-auto px-6 py-12">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-6">
-                <Shield className="w-7 h-7 text-blue-500" />
-                <span className="text-xl font-bold dark:text-white">
-                  Buffalu
-                </span>
-              </div>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
-                A decentralized location verification protocol built on Solana,
-                enabling trustless proof-of-location.
-              </p>
-              <div className="flex space-x-4">
-                <a
-                  href="https://twitter.com/buffaluprotocol"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-500 transition-colors"
-                >
-                  <Twitter className="w-6 h-6" />
-                </a>
-                <a
-                  href="https://github.com/buffalu"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-500 transition-colors"
-                >
-                  <Github className="w-6 h-6" />
-                </a>
-                <a
-                  href="https://discord.gg/buffalu"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-500 transition-colors"
-                >
-                  <MessageSquare className="w-6 h-6" />
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="font-bold text-lg mb-6 dark:text-white">
-                Protocol
-              </h3>
-              <ul className="space-y-4">
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors"
-                  >
-                    How It Works
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors"
-                  >
-                    Tokenomics
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors"
-                  >
-                    Validators
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors"
-                  >
-                    Whitepaper
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-bold text-lg mb-6 dark:text-white">
-                Resources
-              </h3>
-              <ul className="space-y-4">
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors"
-                  >
-                    Documentation
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors"
-                  >
-                    API Reference
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors"
-                  >
-                    GitHub
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors"
-                  >
-                    Community
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-bold text-lg mb-6 dark:text-white">Legal</h3>
-              <ul className="space-y-4">
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors"
-                  >
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors"
-                  >
-                    Terms of Service
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-500 transition-colors"
-                  >
-                    Cookie Policy
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-200 dark:border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-600 dark:text-gray-400 text-sm">
-              © {new Date().getFullYear()} Buffalu Protocol. All rights
-              reserved.
-            </p>
-            <div className="flex items-center space-x-2 mt-4 md:mt-0">
-              <span className="text-gray-600 dark:text-gray-400 text-sm">
-                Built on
-              </span>
-              <span className="bg-gradient-to-r from-purple-500 to-purple-600 text-white text-xs px-2 py-1 rounded font-medium">
-                Solana
-              </span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      
+     <Footer/>
     </div>
   );
 };
