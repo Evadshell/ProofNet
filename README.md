@@ -26,7 +26,6 @@ Key Features:
 - Modern, responsive UI
 - Wallet integration
 - Real-time communication
-- 3D visualizations
 - Dark/light theme support
 - Interactive components
 
