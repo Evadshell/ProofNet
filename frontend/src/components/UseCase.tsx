@@ -58,7 +58,7 @@ export default function UseCasesSection() {
             <span className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-purple-600 rounded-full"></span>
           </h2>
           <p className="text-gray-300 max-w-2xl mx-auto text-lg">
-            Buffalo's location verification protocol opens up new possibilities across various industries and
+            Buffalo`s location verification protocol opens up new possibilities across various industries and
             applications.
           </p>
         </div>
