@@ -24,8 +24,10 @@ import { VerificationResultCard } from "@/components/verification/verification-r
 import { VerificationHistory } from "@/components/verification/verification-history"
 import { WalletInfo } from "@/components/verification/wallet-info"
 import { SessionCard } from "@/components/verification/session-card"
-
+import { Vortex } from "@/components/ui/vortex"
 import { DebugContract } from "@/components/debug-contract"
+import { RadioTower } from "lucide-react"
+import { Wallet } from "lucide-react"
 
 interface Session {
   sessionId: string
@@ -73,7 +75,7 @@ interface UserData {
   verifiedUsers: string[]
   tokens: number
   sessionId: string | null
-  pastSessionIds?: string[]
+  sessionHistory: string[]
   publicKey?: string
 }
 
@@ -112,13 +114,14 @@ export default function Dashboard() {
     verifiedUsers: [],
     tokens: 0,
     sessionId: null,
+    sessionHistory: [],
   })
   const [savedSessionId, setSavedSessionId] = useState<string | null>(null)
   const [userAccount, setUserAccount] = useState<any>(null)
 
   const socketRef = useRef<Socket | null>(null)
-  const SOCKET_SERVER = process.env.NEXT_PUBLIC_SOCKET_SERVER
-  // const SOCKET_SERVER = "https://3fcc-103-199-188-246.ngrok-free.app"
+  // const SOCKET_SERVER = process.env.NEXT_PUBLIC_SOCKET_SERVER
+  const SOCKET_SERVER = "http://localhost:4000"
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const activeSessionsTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const loadingTimeoutsRef = useRef<{ [key: string]: NodeJS.Timeout | null }>({})
@@ -291,7 +294,7 @@ export default function Dashboard() {
           verifiedUsers: userAccount.account.usersVerified || [],
           tokens: 0,
           sessionId: userAccount.account.clientSessionId,
-          pastSessionIds: userAccount.account.pastSessionIds || [],
+          sessionHistory: userAccount.account.pastSessionIds || [],
         }
 
         setUserData(userData)
@@ -407,6 +410,7 @@ export default function Dashboard() {
       setUserData((prev) => ({
         ...prev,
         sessionId: sessionId,
+        sessionHistory: Array.from(new Set([...(prev.sessionHistory || []), sessionId])),
       }))
 
       setClientSessionId("")
@@ -1174,246 +1178,306 @@ export default function Dashboard() {
   }, [walletAddress])
 
   return (
-    <div className="container mx-auto p-6 relative">
-      <TokenDisplay tokens={userData.tokens} />
+       <Vortex 
+                  particleCount={700}
+                  baseHue={220}
+                  backgroundColor="#000000"
+                  baseRadius={1}
+                  rangeRadius={2}
+                  baseSpeed={0.1}
+                  rangeSpeed={1.5}
+                  containerClassName="relatuve inset-0"
+                >
+    <div className="container mx-auto p-8 max-w-4xl">
+  <TokenDisplay tokens={userData.tokens} />
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Wifi className={isConnected ? "text-green-500" : "text-red-500"} />
-            Socket.IO Communication
-          </CardTitle>
-          <CardDescription>Connect your UDP client to the verification server</CardDescription>
-        </CardHeader>
+  {/* Main Connection Card */}
+  <Card className="mb-8 overflow-hidden shadow-xl border-0">
+    <div className="bg-gradient-to-r from-indigo-900 via-purple-800 to-violet-700 p-1">
+      <CardHeader className="bg-gradient-to-b from-purple-900/90 to-purple-900 backdrop-blur-sm">
+        <CardTitle className="flex items-center gap-3 text-white text-2xl font-bold">
+          <RadioTower className={isConnected ? "text-emerald-400" : "text-red-400"} size={40} />
+          Buffalu Communication
+        </CardTitle>
+        <CardDescription className="text-purple-100 text-base">
+          Connect your UDP client to the verification server
+        </CardDescription>
+      </CardHeader>
 
-        <CardContent>
-          {/* Add Wallet Info */}
-          <WalletInfo walletAddress={walletAddress} isConnected={connected} />
+      <CardContent className="bg-gradient-to-b from-purple-900/90 to-purple-800 py-6 text-white">
+        {/* Wallet Info Section */}
+        <WalletInfo walletAddress={walletAddress} isConnected={connected} />
 
-          <div className="mb-4">
-            <div
-              className={`inline-block px-2 py-1 rounded-full text-sm ${
-                isConnected ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-              }`}
-            >
-              {isConnected ? "Connected" : "Disconnected"}
-            </div>
-            <p className="text-gray-600 mt-1">{message}</p>
-          </div>
-
-          {error && (
-            <Alert variant="destructive" className="mb-4">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
-
-          {successMessage && (
-            <Alert className="mb-4 bg-green-50 border-green-200">
-              <CheckCircle className="h-4 w-4 text-green-500" />
-              <AlertTitle className="text-green-700">Success</AlertTitle>
-              <AlertDescription className="text-green-600">{successMessage}</AlertDescription>
-            </Alert>
-          )}
-
-          {/* Only show registration UI if not verified */}
-          {!userData.isVerified && (
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="clientSessionId">Your Client Session ID</Label>
-                <div className="flex gap-2">
-                  <Input
-                    id="clientSessionId"
-                    value={clientSessionId}
-                    onChange={(e) => setClientSessionId(e.target.value)}
-                    placeholder={savedSessionId ? "Using saved session ID" : "Enter your UDP client session ID"}
-                    className="flex-1"
-                  />
-                  <Button
-                    onClick={registerClient}
-                    disabled={!isConnected || !clientSessionId || isLoading}
-                    className="whitespace-nowrap"
-                  >
-                    {loadingStates.registration ? "Registering..." : savedSessionId ? "Update Session" : "Register"}
-                  </Button>
+        {/* Session History Section */}
+        {userData.sessionHistory && userData.sessionHistory.length > 0 && (
+          <div className="mt-4 p-4 bg-purple-900/30 rounded-lg border border-purple-700/30">
+            <h3 className="text-purple-200 font-medium mb-2">Session History</h3>
+            <div className="space-y-2">
+              {userData.sessionHistory.map((sid, index) => (
+                <div key={index} className="flex items-center gap-2 text-sm">
+                  <Clock className="h-4 w-4 text-purple-400" />
+                  <span className="text-purple-300">{sid}</span>
                 </div>
-                {savedSessionId && (
-                  <p className="text-xs text-green-600">
-                    <CheckCircle className="h-3 w-3 inline mr-1" />
-                    Using saved session ID: {savedSessionId.substring(0, 8)}...
-                  </p>
-                )}
-                <p className="text-xs text-gray-500">This is the session ID from your UDP client</p>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Connection Status */}
+        <div className="mb-6">
+          <div
+            className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${
+              isConnected 
+                ? "bg-emerald-100/20 text-emerald-300 border border-emerald-400/30" 
+                : "bg-red-100/20 text-red-300 border border-red-400/30"
+            }`}
+          >
+            <div className={`w-2 h-2 rounded-full mr-2 ${isConnected ? "bg-emerald-400" : "bg-red-400"}`}></div>
+            {isConnected ? "Connected" : "Disconnected"}
+          </div>
+          <p className="text-purple-200 mt-2 text-sm">{message}</p>
+        </div>
+
+        {/* Alert Messages */}
+        {error && (
+          <Alert variant="destructive" className="mb-5 bg-red-900/50 border border-red-700 text-red-200">
+            <AlertCircle className="h-4 w-4 text-red-400" />
+            <AlertTitle className="text-red-200">Error</AlertTitle>
+            <AlertDescription className="text-red-300">{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {successMessage && (
+          <Alert className="mb-5 bg-emerald-900/50 border border-emerald-700">
+            <CheckCircle className="h-4 w-4 text-emerald-400" />
+            <AlertTitle className="text-emerald-200">Success</AlertTitle>
+            <AlertDescription className="text-emerald-300">{successMessage}</AlertDescription>
+          </Alert>
+        )}
+
+        {/* Registration UI */}
+        {!userData.isVerified && (
+          <div className="grid gap-5 mt-4">
+            <div className="grid gap-3">
+              <Label htmlFor="clientSessionId" className="text-purple-100 text-sm font-medium">
+                Your Client Session ID
+              </Label>
+              <div className="flex gap-3">
+                <Input
+                  id="clientSessionId"
+                  value={clientSessionId}
+                  onChange={(e) => setClientSessionId(e.target.value)}
+                  placeholder={savedSessionId ? "Using saved session ID" : "Enter your UDP client session ID"}
+                  className="flex-1 bg-purple-900 border-purple-800 text-white placeholder:text-purple-300/50 focus:ring-purple-400"
+                />
+                <Button
+                  onClick={registerClient}
+                  disabled={!isConnected || !clientSessionId || isLoading}
+                  className="whitespace-nowrap bg-purple-500 hover:bg-purple-400 text-white"
+                >
+                  {loadingStates.registration ? "Registering..." : savedSessionId ? "Update Session" : "Register"}
+                </Button>
+              </div>
+              {savedSessionId && (
+                <p className="text-xs text-emerald-400 flex items-center">
+                  <CheckCircle className="h-3 w-3 inline mr-1" />
+                  Using saved session ID: {savedSessionId.substring(0, 8)}...
+                </p>
+              )}
+              <p className="text-xs text-purple-300/70">This is the session ID from your UDP client</p>
+            </div>
+
+            {(savedSessionId || clientSessionId) && (
+              <div className="mt-2">
+                <Button
+                  onClick={() => {
+                    getActiveSessions()
+                    setTimeout(() => {
+                      if (autoSelectVerificationSession()) {
+                        setTimeout(() => {
+                          requestVerification()
+                          toast.success("Verification request sent automatically")
+                        }, 500)
+                      }
+                    }, 1000)
+                  }}
+                  className="w-full bg-indigo-600 hover:bg-indigo-500 text-white"
+                  disabled={!isConnected || isLoading}
+                  variant="secondary"
+                >
+                  Get Verified Now
+                </Button>
+                <p className="text-xs text-purple-300/70 mt-2">
+                  Click to automatically request verification from an available session
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </CardContent>
+    </div>
+  </Card>
+
+  {/* Verified Account Card or Tabs */}
+  {userData.isVerified ? (
+    <Card className="shadow-lg border-0">
+      <CardHeader className="bg-gradient-to-r from-emerald-900/20 to-emerald-800/20 border-b border-emerald-800/30">
+        <CardTitle className="flex items-center gap-2 text-emerald-500">
+          <CheckCircle className="text-emerald-500" />
+          Verified Account
+        </CardTitle>
+        <CardDescription className="text-emerald-700">Your account has been successfully verified</CardDescription>
+      </CardHeader>
+      <CardContent className="pt-6">
+        <VerificationHistory verifications={verifications} />
+      </CardContent>
+    </Card>
+  ) : (
+    <Tabs defaultValue="sessions" className="w-full">
+      <TabsList className="grid w-full grid-cols-2 p-1 bg-gradient-to-r from-indigo-900 via-purple-800 to-violet-700 rounded-lg mb-2">
+        <TabsTrigger value="sessions" className="rounded-md data-[state=active]:bg-white data-[state=active]:shadow-sm">
+          Active Sessions
+        </TabsTrigger>
+        <TabsTrigger value="verifications" className="rounded-md data-[state=active]:bg-white data-[state=active]:shadow-sm">
+          Verifications
+        </TabsTrigger>
+      </TabsList>
+
+      {/* Sessions Tab */}
+      <TabsContent value="sessions" className="mt-2">
+        <Card className="border-0 shadow-lg overflow-hidden">
+          <div className="bg-gradient-to-r from-indigo-900 to-violet-900 p-1">
+            <CardHeader className="bg-gradient-to-r from-indigo-900 via-purple-800 to-violet-700">
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Radio className="text-indigo-400"size={45} />
+                Active Sessions
+              </CardTitle>
+              <CardDescription className="text-indigo-200">Request verification from active sessions</CardDescription>
+            </CardHeader>
+
+            <CardContent className="bg-gradient-to-r from-indigo-900 via-purple-800 to-violet-700 py-6 text-white">
+              <VerificationProgressBar verifications={verifications} />
+
+              <div className="mb-6 mt-4">
+                <Button
+                  onClick={getActiveSessions}
+                  disabled={!isConnected || isRefreshingActiveSessions}
+                  className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500"
+                >
+                  {isRefreshingActiveSessions ? (
+                    <>
+                      <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-1"></div>
+                      Loading...
+                    </>
+                  ) : (
+                    "Refresh Sessions"
+                  )}
+                </Button>
               </div>
 
-              {(savedSessionId || clientSessionId) && (
-                <div className="mt-2">
-                  <Button
-                    onClick={() => {
-                      getActiveSessions()
-                      setTimeout(() => {
-                        if (autoSelectVerificationSession()) {
-                          setTimeout(() => {
-                            requestVerification()
-                            toast.success("Verification request sent automatically")
-                          }, 500)
-                        }
-                      }, 1000)
-                    }}
-                    className="w-full"
-                    disabled={!isConnected || isLoading}
-                    variant="secondary"
-                  >
-                    Get Verified Now
-                  </Button>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Click to automatically request verification from an available session
-                  </p>
+              {activeSessions.length > 0 ? (
+                <div className="grid gap-4">
+                  {activeSessions.map((session) => (
+                    <SessionCard
+                      key={session.sessionId}
+                      session={session}
+                      isSelected={selectedSession === session.sessionId}
+                      onClick={() => setSelectedSession(session.sessionId)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-10 bg-indigo-900/30 rounded-lg border border-indigo-700/30">
+                  <AlertCircle className="mx-auto h-10 w-10 mb-3 text-indigo-400 opacity-70" />
+                  <p className="text-indigo-200 font-medium">No active sessions found</p>
+                  <p className="text-sm text-indigo-300/70 mt-1">Click refresh to check for sessions</p>
                 </div>
               )}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            </CardContent>
 
-      {userData.isVerified ? (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CheckCircle className="text-green-500" />
-              Verified Account
+            <CardFooter className="bg-gradient-to-b from-indigo-800 to-indigo-900 py-4">
+              <Button
+                onClick={requestVerification}
+                disabled={!isConnected || !selectedSession || (!clientSessionId && !savedSessionId)}
+                className="w-full bg-violet-600 hover:bg-violet-500 text-white font-medium py-2"
+              >
+                Request Verification
+              </Button>
+            </CardFooter>
+          </div>
+        </Card>
+      </TabsContent>
+
+      {/* Verifications Tab */}
+      <TabsContent value="verifications" className="mt-2">
+        <Card className="border-0 shadow-lg">
+          <CardHeader className="bg-gradient-to-r from-gray-100 to-gray-50 border-b">
+            <CardTitle className="flex items-center gap-2 text-gray-800">
+              <CheckCircle className="text-violet-600" />
+              Verification Results
             </CardTitle>
-            <CardDescription>Your account has been successfully verified</CardDescription>
+            <CardDescription className="text-gray-500">View the status and results of verification requests</CardDescription>
           </CardHeader>
-          <CardContent>
-            <VerificationHistory verifications={verifications} />
-          </CardContent>
-        </Card>
-      ) : (
-        <Tabs defaultValue="sessions">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="sessions">Active Sessions</TabsTrigger>
-            <TabsTrigger value="verifications">Verifications</TabsTrigger>
-          </TabsList>
 
-          <TabsContent value="sessions">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Radio />
-                  Active Sessions
-                </CardTitle>
-                <CardDescription>Request verification from active sessions</CardDescription>
-              </CardHeader>
+          <CardContent className="pt-6">
+            <VerificationProgressBar verifications={verifications} />
 
-              <CardContent>
-                <VerificationProgressBar verifications={verifications} />
-
-                <div className="mb-4">
-                  <Button
-                    onClick={getActiveSessions}
-                    disabled={!isConnected || isRefreshingActiveSessions}
-                    className="flex items-center gap-2"
-                  >
-                    {isRefreshingActiveSessions ? "Loading..." : "Refresh Sessions"}
-                  </Button>
-                </div>
-
-                {activeSessions.length > 0 ? (
-                  <div className="grid gap-4">
-                    {activeSessions.map((session) => (
-                      <SessionCard
-                        key={session.sessionId}
-                        session={session}
-                        isSelected={selectedSession === session.sessionId}
-                        onClick={() => setSelectedSession(session.sessionId)}
-                      />
-                    ))}
-                  </div>
+            <div className="my-6">
+              <Button
+                onClick={checkVerificationStatus}
+                className="w-full bg-violet-600 hover:bg-violet-500 text-white"
+                disabled={!walletAddress || loadingStates.verificationStatus}
+              >
+                {loadingStates.verificationStatus ? (
+                  <>
+                    <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                    Checking...
+                  </>
                 ) : (
-                  <div className="text-center py-8 text-gray-500">
-                    <AlertCircle className="mx-auto h-8 w-8 mb-2" />
-                    <p>No active sessions found</p>
-                    <p className="text-sm">Click refresh to check for sessions</p>
-                  </div>
+                  "Check Verification Status"
                 )}
-              </CardContent>
+              </Button>
+            </div>
 
-              <CardFooter>
-                <Button
-                  onClick={requestVerification}
-                  disabled={!isConnected || !selectedSession || (!clientSessionId && !savedSessionId)}
-                  className="w-full"
-                >
-                  {"Request Verification"}
-                </Button>
-              </CardFooter>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="verifications">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CheckCircle />
-                  Verification Results
-                </CardTitle>
-                <CardDescription>View the status and results of verification requests</CardDescription>
-              </CardHeader>
-
-              <CardContent>
-                <VerificationProgressBar verifications={verifications} />
-
-                <div className="mb-6">
-                  <Button
-                    onClick={checkVerificationStatus}
-                    className="w-full mb-4"
-                    disabled={!walletAddress || loadingStates.verificationStatus}
-                  >
-                    {loadingStates.verificationStatus ? "Checking..." : "Check Verification Status"}
-                  </Button>
-                </div>
-
-                {verifications.length > 0 ? (
-                  <div className="grid gap-4">
-                    {verifications
-                      .filter((v) => v.result === "verified" || v.result === "rejected" || v.status === "pending")
-                      .map((verification) => (
-                        <VerificationResultCard key={verification.verificationId} verification={verification} />
-                      ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-gray-500">
-                    <Clock className="mx-auto h-8 w-8 mb-2" />
-                    <p>No verifications yet</p>
-                    <p className="text-sm">Click Get Verified or request verification manually</p>
-                  </div>
-                )}
-              </CardContent>
-
-              <CardFooter>
-                <Button onClick={() => setVerifications([])} variant="outline" className="ml-auto">
-                  Clear All Results
-                </Button>
-              </CardFooter>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      )}
-
-      {response && (
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle>Server Response</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">{JSON.stringify(response, null, 2)}</pre>
+            {verifications.length > 0 ? (
+              <div className="grid gap-4">
+                {verifications
+                  .filter((v) => v.result === "verified" || v.result === "rejected" || v.status === "pending")
+                  .map((verification) => (
+                    <VerificationResultCard key={verification.verificationId} verification={verification} />
+                  ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+                <Clock className="mx-auto h-10 w-10 mb-3 text-gray-400" />
+                <p className="text-gray-600 font-medium">No verifications yet</p>
+                <p className="text-sm text-gray-500 mt-1">Click Get Verified or request verification manually</p>
+              </div>
+            )}
           </CardContent>
+
+          <CardFooter className="border-t bg-gray-50 py-4">
+            <Button onClick={() => setVerifications([])} variant="outline" className="ml-auto border-gray-300 hover:bg-gray-100">
+              Clear All Results
+            </Button>
+          </CardFooter>
         </Card>
-      )}
-      {/* Add the debug component at the end of the dashboard */}
-      {/* <DebugContract /> */}
-    </div>
+      </TabsContent>
+    </Tabs>
+  )}
+
+  {/* Server Response Card */}
+  {response && (
+    <Card className="mt-8 border-0 shadow-lg overflow-hidden">
+      <CardHeader className="bg-gradient-to-r from-gray-100 to-gray-50 border-b">
+        <CardTitle className="text-gray-800">Server Response</CardTitle>
+      </CardHeader>
+      <CardContent className="pt-6">
+        <pre className="bg-gray-800 text-gray-200 p-5 rounded-lg overflow-x-auto text-sm font-mono">{JSON.stringify(response, null, 2)}</pre>
+      </CardContent>
+    </Card>
+  )}
+</div>
+</Vortex>
   )
 }

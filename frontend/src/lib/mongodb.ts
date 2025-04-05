@@ -1,7 +1,7 @@
 import { MongoClient, ServerApiVersion } from "mongodb"
 
 // Replace with your MongoDB connection string
-const MONGODB_URI = "mongodb+srv://tejas23100:0ZcrerBY3odcIoUV@data.ajawo.mongodb.net/zenlarn?retryWrites=true&w=majority"
+const MONGODB_URI = "mongodb://127.0.0.1:27017/pol"
 
 if (!MONGODB_URI) {
   throw new Error("Please define the MONGODB_URI environment variable")

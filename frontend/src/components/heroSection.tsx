@@ -8,16 +8,16 @@ import { Globe } from "./magicui/globe"; // Assuming this is your existing Globe
 export default function HeroSection() {
   return (
     <Vortex 
-      particleCount={700}
+      particleCount={500}
       baseHue={220}
       backgroundColor="#000000"
       baseRadius={1}
       rangeRadius={2}
       baseSpeed={0.1}
       rangeSpeed={1.5}
-      containerClassName="relatuve inset-0"
+      containerClassName="relative inset-0 h-screen overflow-x-hidden"
     >
-      <div className="container mx-auto px-6 relative min-h-screen flex items-center">
+      <div className="overflow-x-hidden container mx-auto px-6 relative min-h-screen flex items-center h-full">
         <div className="max-w-3xl">
           <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-blue-900/40 mb-8 shadow-sm">
             <GlobeIcon className="w-4 h-4 text-blue-400" />

@@ -7,10 +7,7 @@ import { getDistance } from "geolib"
 import { io } from "socket.io-client"
 
 const client = createSocket("udp4")
-// const SERVER_HOST = "backend.keshwani.tech"
-// const SERVER_HOST = "backend.keshwani.tech"
-// const SERVER_PORT = 41234 // Convert to number, not string
-// const SOCKET_SERVER =  "http://backend.keshwani.tech"
+
 const SERVER_HOST = "localhost"
 const SERVER_PORT = 41234 // Convert to number, not string
 const SOCKET_SERVER = "http://localhost:4000"

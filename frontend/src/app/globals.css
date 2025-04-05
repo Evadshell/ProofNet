@@ -2,6 +2,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
+body {
+  background: black;
+  overflow-x: hidden;
+  font-family: sans-serif;
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);

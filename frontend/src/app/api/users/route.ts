@@ -31,7 +31,14 @@ export async function POST(request: Request) {
       }
 
       // Only update fields that are provided and not undefined
-      if (userData.sessionId !== undefined) updateData.sessionId = userData.sessionId
+      if (userData.sessionId !== undefined) {
+        updateData.sessionId = userData.sessionId
+        // Add sessionId to sessionHistory if it doesn't exist
+        updateData.sessionHistory = Array.from(new Set([
+          ...(existingUser.sessionHistory || []),
+          userData.sessionId
+        ]))
+      }
       if (userData.isVerified !== undefined) updateData.isVerified = userData.isVerified
       if (userData.tokens !== undefined) updateData.tokens = userData.tokens
 
@@ -90,6 +97,7 @@ export async function POST(request: Request) {
       const newUser = {
         walletAddress: userData.walletAddress,
         sessionId: userData.sessionId || null,
+        sessionHistory: userData.sessionId ? [userData.sessionId] : [],
         isVerified: userData.isVerified || false,
         tokens: userData.tokens || 0,
         verifiedBy: Array.isArray(userData.verifiedBy)
