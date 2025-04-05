@@ -52,7 +52,7 @@ const BuffaluNavbar = () => {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed inset-0 bg-black text-white z-50 flex flex-col p-6"
+            className="inset-0 bg-black text-white z-50 flex flex-col p-6"
           >
             <div className="flex justify-between items-center mb-10">
               <div className="flex items-center space-x-2">

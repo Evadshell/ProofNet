@@ -1180,7 +1180,7 @@ export default function Dashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Wifi className={isConnected ? "text-green-500" : "text-red-500"} />
-            Socket.IO Communication
+            Buffalu Communication
           </CardTitle>
           <CardDescription>Connect your UDP client to the verification server</CardDescription>
         </CardHeader>
@@ -1416,4 +1416,3 @@ export default function Dashboard() {
     </div>
   )
 }
-
