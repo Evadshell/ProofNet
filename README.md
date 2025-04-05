@@ -81,10 +81,9 @@ node index.js
 - React
 - TailwindCSS
 - Socket.IO Client
-- Three.js
-- Radix UI Components
 - TypeScript
 - Framer Motion
+- Aceternity UI
 - Various React utilities and hooks
 
 ### Backend
@@ -94,3 +93,10 @@ node index.js
 - Redis
 - WebSocket
 - Various utility libraries
+
+### Smart Contracts
+- Solana
+- Midnight
+
+
+
