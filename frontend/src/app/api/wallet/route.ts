@@ -1,45 +1,42 @@
-  // app/api/wallet/route.ts
 
-  import { NextRequest, NextResponse } from 'next/server';
-  import clientPromise from '@/lib/mongodb';
 
-  const COLLECTION_NAME = 'wallets';
+import { type NextRequest, NextResponse } from "next/server"
+import clientPromise from "@/lib/mongodb"
 
-  export async function POST(req: NextRequest) {
-    try {
-      const client = await clientPromise;
-      const db = client.db();
-      const collection = db.collection(COLLECTION_NAME);
+const COLLECTION_NAME = "wallets"
 
-      const { walletAddress, isVerified } = await req.json();
+export async function POST(req: NextRequest) {
+  try {
+    const client = await clientPromise
+    const db = client.db()
+    const collection = db.collection(COLLECTION_NAME)
 
-      if (!walletAddress || typeof isVerified !== 'boolean') {
-        return NextResponse.json({ error: 'Invalid request payload' }, { status: 400 });
-      }
+    const { walletAddress, isVerified } = await req.json()
 
-      await collection.updateOne(
-        { walletAddress },
-        { $set: { isVerified } },
-        { upsert: true }
-      );
-
-      return NextResponse.json({ message: 'Wallet status updated' });
-    } catch (error) {
-      console.error('Database error:', error);
-      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    if (!walletAddress || typeof isVerified !== "boolean") {
+      return NextResponse.json({ error: "Invalid request payload" }, { status: 400 })
     }
-  }
 
-  export async function GET() {
-    try {
-      const client = await clientPromise;
-      const db = client.db();
-      const collection = db.collection(COLLECTION_NAME);
+    await collection.updateOne({ walletAddress }, { $set: { isVerified } }, { upsert: true })
 
-      const wallets = await collection.find({}).toArray();
-      return NextResponse.json(wallets);
-    } catch (error) {
-      console.error('Database error:', error);
-      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-    }
+    return NextResponse.json({ message: "Wallet status updated" })
+  } catch (error) {
+    console.error("Database error:", error)
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
+}
+
+export async function GET() {
+  try {
+    const client = await clientPromise
+    const db = client.db()
+    const collection = db.collection(COLLECTION_NAME)
+
+    const wallets = await collection.find({}).toArray()
+    return NextResponse.json(wallets)
+  } catch (error) {
+    console.error("Database error:", error)
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+  }
+}
+
