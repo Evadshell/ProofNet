@@ -121,7 +121,7 @@ export default function Dashboard() {
 
   const socketRef = useRef<Socket | null>(null)
   // const SOCKET_SERVER = process.env.NEXT_PUBLIC_SOCKET_SERVER
-  const SOCKET_SERVER = "http://localhost:4000"
+  const SOCKET_SERVER = "https://6322-14-139-241-220.ngrok-free.app"
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const activeSessionsTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const loadingTimeoutsRef = useRef<{ [key: string]: NodeJS.Timeout | null }>({})

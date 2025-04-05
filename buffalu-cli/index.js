@@ -8,12 +8,12 @@ import { io } from "socket.io-client"
 
 const client = createSocket("udp4")
 
-const SERVER_HOST = "localhost"
-const SERVER_PORT = 41234 // Convert to number, not string
-const SOCKET_SERVER = "http://localhost:4000"
-// const SERVER_HOST = "rnsbb-103-199-188-246.a.free.pinggy.link"
-// const SERVER_PORT = 37470 // Convert to number, not string
-// const SOCKET_SERVER =  "https://3fcc-103-199-188-246.ngrok-free.app"
+// const SERVER_HOST = "localhost"
+// const SERVER_PORT = 41234 // Convert to number, not string
+// const SOCKET_SERVER = "http://localhost:4000"
+const SERVER_HOST = "rncyc-14-139-241-220.a.free.pinggy.link"
+const SERVER_PORT = 34581 // Convert to number, not string
+const SOCKET_SERVER =  "https://6322-14-139-241-220.ngrok-free.app"
 // Configuration
 // const SERVER_HOST = "rnaat-2405-201-301c-4114-5589-1cac-5504-9dea.a.free.pinggy.link"
 // const SERVER_PORT = 38541 // Convert to number, not string
