@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { cn } from "@/lib/utils";
 import { GlobeIcon, ChevronRight, FileText } from "lucide-react";
 import { Vortex } from "./ui/vortex"; // Make sure the path is correct

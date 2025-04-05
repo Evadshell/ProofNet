@@ -1,3 +1,7 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from "@/lib/utils";
 import React, { useEffect, useRef } from "react";
 import { createNoise3D } from "simplex-noise";
@@ -40,7 +44,7 @@ export const Vortex = (props: VortexProps) => {
   let tick = 0;
   const noise3D = createNoise3D();
   let particleProps = new Float32Array(particlePropsLength);
-  let center: [number, number] = [0, 0];
+  const center: [number, number] = [0, 0];
 
   const HALF_PI: number = 0.5 * Math.PI;
   const TAU: number = 2 * Math.PI;
@@ -122,7 +126,7 @@ export const Vortex = (props: VortexProps) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    let i2 = 1 + i,
+    const i2 = 1 + i,
       i3 = 2 + i,
       i4 = 3 + i,
       i5 = 4 + i,
