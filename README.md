@@ -1,6 +1,6 @@
 # ProofNet
 
-ProofNet is a modern web application built with a microservices architecture, consisting of a Next.js frontend, Node.js backend server, and a CLI tool.
+ProofNet is a modern web application built with a microservices architecture, consisting of a Next.js frontend, Node.js backend server, and a CLI tool i.e an npm package to detect proof of location UDP pins.
 
 ## Project Structure
 
