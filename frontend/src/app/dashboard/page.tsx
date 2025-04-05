@@ -117,7 +117,8 @@ export default function Dashboard() {
   const [userAccount, setUserAccount] = useState<any>(null)
 
   const socketRef = useRef<Socket | null>(null)
-  const SOCKET_SERVER = process.env.NEXT_PUBLIC_SOCKET_SERVER
+  // const SOCKET_SERVER = process.env.NEXT_PUBLIC_SOCKET_SERVER
+  const SOCKET_SERVER = "https://3fcc-103-199-188-246.ngrok-free.app"
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const activeSessionsTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const loadingTimeoutsRef = useRef<{ [key: string]: NodeJS.Timeout | null }>({})
