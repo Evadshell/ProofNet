@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "buffalu",
+  title: "ProofNet",
 };
 
 export default function RootLayout({
@@ -28,6 +28,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AppWalletProvider>
+          
           {children}
         </AppWalletProvider>
       </body>
