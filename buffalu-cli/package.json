@@ -1,6 +1,6 @@
 {
   "name": "buffalu-cli",
-  "version": "1.0.9",
+  "version": "1.0.11",
   "main": "index.js",
   "bin": {
     "buffalu-cli": "index.js"

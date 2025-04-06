@@ -121,7 +121,8 @@ export default function Dashboard() {
 
   const socketRef = useRef<Socket | null>(null)
   // const SOCKET_SERVER = process.env.NEXT_PUBLIC_SOCKET_SERVER
-  const SOCKET_SERVER = "https://6322-14-139-241-220.ngrok-free.app"
+  // const SOCKET_SERVER = "https://8037-14-139-241-220.ngrok-free.app"
+  const SOCKET_SERVER = "https://rhythm-soap-poly-interference.trycloudflare.com/"
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const activeSessionsTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const loadingTimeoutsRef = useRef<{ [key: string]: NodeJS.Timeout | null }>({})
@@ -647,7 +648,23 @@ export default function Dashboard() {
 
     fetchInitialVerifications()
   }, [savedSessionId, clientSessionId, fetchVerificationsFromChain, setIsLoading])
+  const registerWithSavedSessionId = useCallback(
+    (sessionId: string) => {
+      if (socketRef.current && isConnected) {
+        console.log(`Auto-registering with saved session ID: ${sessionId}`)
 
+        socketRef.current.emit("registerClient", {
+          sessionId: sessionId,
+          timestamp: Date.now(),
+        })
+
+        socketRef.current.emit("register", "frontend")
+
+        setClientSessionId(sessionId)
+      }
+    },
+    [isConnected],
+  )
   useEffect(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
@@ -953,42 +970,9 @@ export default function Dashboard() {
         socketRef.current.disconnect()
       }
     }
-  }, [
-    reconnectAttempts,
-    walletAddress,
-    saveUserOnChain,
-    saveVerificationOnChain,
-    handleSuccessfulRegistration,
-    getActiveSessions,
-    verifications,
-    savedSessionId,
-    isConnected,
-    handleVerificationComplete,
-    clearLoadingTimeout,
-    setLoadingTimeout,
-    userAccount,
-    fetchUserFromChain,
-    setIsLoading,
-    KyPair,
-  ])
+  }, [reconnectAttempts, walletAddress, saveUserOnChain, saveVerificationOnChain, handleSuccessfulRegistration, getActiveSessions, verifications, savedSessionId, isConnected, handleVerificationComplete, clearLoadingTimeout, setLoadingTimeout, userAccount, fetchUserFromChain, setIsLoading, KyPair, registerWithSavedSessionId, clientSessionId])
 
-  const registerWithSavedSessionId = useCallback(
-    (sessionId: string) => {
-      if (socketRef.current && isConnected) {
-        console.log(`Auto-registering with saved session ID: ${sessionId}`)
-
-        socketRef.current.emit("registerClient", {
-          sessionId: sessionId,
-          timestamp: Date.now(),
-        })
-
-        socketRef.current.emit("register", "frontend")
-
-        setClientSessionId(sessionId)
-      }
-    },
-    [isConnected],
-  )
+ 
 
   const requestVerification = useCallback(() => {
     const sessionIdToUse = savedSessionId || clientSessionId
