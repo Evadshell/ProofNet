@@ -1,0 +1,21 @@
+pragma language_version >= 0.14.0;
+
+import CompactStandardLibrary;
+
+// public state mapping user addresses to verification status (true/false)
+export ledger userVerified: Map<Address, Bool>;
+
+// transition to verify a user
+export circuit verifyUser(user: Address): [] {
+  userVerified[user] = true;
+}
+
+// transition to unverify a user (optional)
+export circuit unverifyUser(user: Address): [] {
+  userVerified[user] = false;
+}
+
+// transition to check if user is verified (for frontend)
+export circuit isUserVerified(user: Address): [Bool] {
+  return [userVerified.get(user).unwrap_or(false)];
+}
