@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client"
+import { MidnightButton } from 'use-midnight';
 
 import { useState, useEffect, useRef, useCallback } from "react"
 import { io, type Socket } from "socket.io-client"
@@ -1191,7 +1192,7 @@ export default function Dashboard() {
       <CardContent className="bg-gradient-to-b from-purple-900/90 to-purple-800 py-6 text-white">
         {/* Wallet Info Section */}
         <WalletInfo walletAddress={walletAddress} isConnected={connected} />
-
+        <MidnightButton />
         {/* Session History Section */}
         {userData.sessionHistory && userData.sessionHistory.length > 0 && (
           <div className="mt-4 p-4 bg-purple-900/30 rounded-lg border border-purple-700/30">

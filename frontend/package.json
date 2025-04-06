@@ -10,6 +10,17 @@
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.31.0",
+    "@midnight-ntwrk/dapp-connector-api": "^2.0.0",
+    "@midnight-ntwrk/midnight-js-level-private-state-provider": "^1.0.0",
+    "@midnight-ntwrk/wallet": "^4.0.0",
+    "@midnight-ntwrk/wallet-api": "^4.0.0",
+    "@midnight-ntwrk/wallet-sdk-address-format": "^1.0.0",
+    "@midnight-ntwrk/wallet-sdk-hd": "^1.0.0",
+    "@midnight-ntwrk/zswap": "^3.0.6",
+    "midnight": "^0.1.0",
+    "midnight-js": "^0.1.0",
+    "use-midnight": "^0.1.0"
+,
     "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
     "@metaplex-foundation/umi": "^1.1.1",
     "@metaplex-foundation/umi-bundle-defaults": "^1.1.1",
